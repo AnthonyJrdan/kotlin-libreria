@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ProyectoLibreria</string>
+    <string name="txtlogin">Ingrese su nombre de usuario\n</string>
+    <string name="txtregistrarse">Registrarse</string>
+    <string name="txtiniciosesion">Iniciar Sesion</string>
+    <string name="hcontrasena">Ingrese su Constraseña</string>
+    <string name="txtregistro">Registrarse</string>
+    <string name="txtRegistroNombre">Usuario</string>
+    <string name="txtregistrocontrasenia">Contraseña</string>
+    <string name="txtRegistro">Registrarse</string>
+    <string name="txtvolverlogin">Volver</string>
+</resources>
