@@ -1,8 +1,12 @@
 package com.libreria.apirest.services;
 
 import com.libreria.apirest.DTO.user.CreateUserRequest;
+import com.libreria.apirest.models.Role;
 import com.libreria.apirest.models.User;
+import com.libreria.apirest.models.UserRol;
+import com.libreria.apirest.repositories.RoleRepository;
 import com.libreria.apirest.repositories.UserRepository;
+import com.libreria.apirest.repositories.UserRolRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +20,14 @@ public class UserService {
     // Injeccion de la clase
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    // Injeccion a RoleRepository
+    @Autowired
+    private RoleRepository roleRepository;
+
+    // Injeccion a UserRolRepository
+    @Autowired
+    private UserRolRepository userRolRepository;
 
 
     // Guardar informacion a la bd
@@ -34,6 +46,24 @@ public class UserService {
         // Encriptar la contraseña
         String encryptedPassword = passwordEncoder.encode(request.password);
         user.setPassword(encryptedPassword);
-        return userRepository.save(user);
+
+
+
+        // Guardar el usuario guardado en una variable
+        User savedUser = userRepository.save(user);
+
+        // Buscar el rol cliente en la tabla de rol
+        Role clienteRole = roleRepository.findById("CLIENT").orElseThrow(
+                () -> new RuntimeException("El Rol de clienten o existe")
+        );
+
+        // Guardar el userrol (el usuario guardado y el rol de cliente)
+        UserRol userRol = new UserRol(savedUser, clienteRole);
+
+        // Guardar el usuario
+        userRolRepository.save(userRol);
+
+
+        return  savedUser;
     }
 }

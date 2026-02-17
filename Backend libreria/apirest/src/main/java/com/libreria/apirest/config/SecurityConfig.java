@@ -21,7 +21,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // AUTORIZAR REQUEST
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+                        // SE ELIMINO EL METODO POST PARA PERMITIR, EN CASO FALTA ESO TODOS LOS METODOS SON PERMITIDOS
+                        .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

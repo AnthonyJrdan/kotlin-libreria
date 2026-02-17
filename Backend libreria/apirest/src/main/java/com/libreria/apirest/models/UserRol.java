@@ -21,4 +21,14 @@ public class UserRol {
     @MapsId("rolId")
     @JoinColumn(name = "id_rol")
     private Role role;
+
+    public  UserRol() {}
+
+    public  UserRol(User user, Role role)
+    {
+        this.user = user;
+        this.role = role;
+        // Ingresa las llaves compuestas de UserRolId
+        this.id = new UserRolId(user.getId(), role.getId());
+    }
 }

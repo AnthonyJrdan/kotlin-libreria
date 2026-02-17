@@ -33,4 +33,12 @@ public class UserRolId implements Serializable {
     {
         return  Objects.hash(userId, rolId);
     }
+
+    public UserRolId() {}
+
+    //constructor
+    public UserRolId(Long userId, String rolId) {
+        this.userId = userId;
+        this.rolId = rolId;
+    }
 }
