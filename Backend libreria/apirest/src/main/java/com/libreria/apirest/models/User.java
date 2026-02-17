@@ -1,9 +1,14 @@
 package com.libreria.apirest.models;
 
+import com.libreria.apirest.models.id.UserRolId;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "usuarios")
 public class User {
@@ -30,7 +35,7 @@ public class User {
     @Column(length = 255, nullable = false)
     private String password;
 
-    @Column(name = "notification_token", length = 255, nullable = false)
+    @Column(name = "notification_token", length = 255, nullable = true)
     private String notificationToken;
 
 
@@ -40,6 +45,11 @@ public class User {
 
     @Column(name = "fecha_actualizacion", nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
+
+
+    // Anotacion uno a muchos
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserRol> roles = new HashSet<>();
 
     public User () {}
 
