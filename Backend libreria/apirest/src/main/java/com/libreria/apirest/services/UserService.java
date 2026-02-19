@@ -1,6 +1,7 @@
 package com.libreria.apirest.services;
 
 import com.libreria.apirest.DTO.user.CreateUserRequest;
+import com.libreria.apirest.DTO.user.CreateUserResponse;
 import com.libreria.apirest.models.Role;
 import com.libreria.apirest.models.User;
 import com.libreria.apirest.models.UserRol;
@@ -8,9 +9,11 @@ import com.libreria.apirest.repositories.RoleRepository;
 import com.libreria.apirest.repositories.UserRepository;
 import com.libreria.apirest.repositories.UserRolRepository;
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
@@ -62,6 +65,19 @@ public class UserService {
 
         // Guardar el usuario
         userRolRepository.save(userRol);
+
+
+        CreateUserResponse response = new CreateUserResponse();
+        response.setId(savedUser.getId());
+        response.setNombre(savedUser.getNombre());
+        response.setApellido(savedUser.getApellido());
+        response.setImagen(savedUser.getImagen());
+        response.setTelefono(savedUser.getTelefono());
+
+        //
+
+        response.setRoles();
+
 
 
         return  savedUser;

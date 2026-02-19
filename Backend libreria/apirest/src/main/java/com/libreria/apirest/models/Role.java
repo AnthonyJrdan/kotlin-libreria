@@ -35,7 +35,7 @@ public class Role {
 
     // Anotacion uno a muchos
     @OneToMany(mappedBy = "role",cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRol> user = new HashSet<>();
+    private Set<UserRol> userRoles = new HashSet<>();
 
     // Constructor
     public Role() {}

@@ -2,7 +2,9 @@ package com.libreria.apirest.models;
 
 import com.libreria.apirest.models.id.UserRolId;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -49,7 +51,7 @@ public class User {
 
     // Anotacion uno a muchos
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRol> roles = new HashSet<>();
+    private Set<UserRol> userRoles = new HashSet<>();
 
     public User () {}
 
@@ -58,4 +60,5 @@ public class User {
     public void onUpdate() {
         this.updateAt = LocalDateTime.now();
     }
+
 }
