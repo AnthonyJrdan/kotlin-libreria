@@ -1,5 +1,6 @@
 package com.libreria.apirest.services;
 
+import com.libreria.apirest.DTO.rol.RoleDTO;
 import com.libreria.apirest.DTO.user.CreateUserRequest;
 import com.libreria.apirest.DTO.user.CreateUserResponse;
 import com.libreria.apirest.models.Role;
@@ -9,10 +10,11 @@ import com.libreria.apirest.repositories.RoleRepository;
 import com.libreria.apirest.repositories.UserRepository;
 import com.libreria.apirest.repositories.UserRolRepository;
 import jakarta.transaction.Transactional;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -32,10 +34,9 @@ public class UserService {
     @Autowired
     private UserRolRepository userRolRepository;
 
-
     // Guardar informacion a la bd
     @Transactional
-    public User create(CreateUserRequest request)
+    public CreateUserResponse create(CreateUserRequest request)
     {
         if (userRepository.existsByEmail(request.email)) {
             throw new RuntimeException("El Correo ya esta registrado");
@@ -75,11 +76,16 @@ public class UserService {
         response.setTelefono(savedUser.getTelefono());
 
         //
+        List<Role> roles = roleRepository.findAllByUserRoles_User_Id(savedUser.getId());
+        List<RoleDTO> roleDTOS = roles.stream()
+                        .map(role -> new RoleDTO(role.getId(), role.getNombre(), role.getImagen(), role.getRuta()))
+                                .toList();
 
-        response.setRoles();
+
+        response.setRoles(roleDTOS);
 
 
 
-        return  savedUser;
+        return  response;
     }
 }

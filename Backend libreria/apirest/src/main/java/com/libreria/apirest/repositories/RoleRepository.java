@@ -2,8 +2,6 @@ package com.libreria.apirest.repositories;
 
 import com.libreria.apirest.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,5 +16,5 @@ public interface RoleRepository extends JpaRepository<Role, String> {
     //@Query("SELECT r from role r JOIN r.userRoles ur WHERE ur.user.id = :userId")
     //List<Role> findRolesByUserId(@Param("userId") Long userId);
 
-    List<Role> findAllbyUserRoles_User_Id(Long idUser);
+    List<Role> findAllByUserRoles_User_Id(Long idUser);
 }

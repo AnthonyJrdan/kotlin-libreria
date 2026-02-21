@@ -1,7 +1,7 @@
 package com.libreria.apirest.controllers;
 
 import com.libreria.apirest.DTO.user.CreateUserRequest;
-import com.libreria.apirest.models.User;
+import com.libreria.apirest.DTO.user.CreateUserResponse;
 import com.libreria.apirest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class AuthController {
     public ResponseEntity<?> create(@RequestBody CreateUserRequest request)
     {
         try{
-            User user = userService.create(request);
+            CreateUserResponse user = userService.create(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         }catch (RuntimeException e){
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(

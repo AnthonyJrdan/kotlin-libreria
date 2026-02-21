@@ -1,7 +1,7 @@
 package com.libreria.apirest.controllers;
 
 import com.libreria.apirest.DTO.user.CreateUserRequest;
-import com.libreria.apirest.models.User;
+import com.libreria.apirest.DTO.user.CreateUserResponse;
 import com.libreria.apirest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,9 @@ public class UserController {
     // DELETE - ELIMINAR
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody CreateUserRequest request)
+    public ResponseEntity<CreateUserResponse> create(@RequestBody CreateUserRequest request)
     {
-        User user = userService.create(request);
+        CreateUserResponse user = userService.create(request);
         return ResponseEntity.ok(user);
     }
 }
