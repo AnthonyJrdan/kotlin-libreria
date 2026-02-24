@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1034109372560",
+    "project_id": "libreriacliente-8add2",
+    "storage_bucket": "libreriacliente-8add2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034109372560:android:c344a182e3525579367015",
+        "android_client_info": {
+          "package_name": "com.isaac.libreriacliente"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqatENi4TOoJIQuXa4KvZ8PmKR4Vd9OeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
