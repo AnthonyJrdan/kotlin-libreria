@@ -2,6 +2,8 @@ package com.libreria.apirest.controllers;
 
 import com.libreria.apirest.DTO.user.CreateUserRequest;
 import com.libreria.apirest.DTO.user.CreateUserResponse;
+import com.libreria.apirest.DTO.user.LoginRequest;
+import com.libreria.apirest.DTO.user.LoginResponse;
 import com.libreria.apirest.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,22 @@ public class AuthController {
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                     "message", e.getMessage(),
                     "statusCode", HttpStatus.BAD_REQUEST.value()
+            ));
+
+        }
+
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request)
+    {
+        try{
+            LoginResponse response = userService.login(request);
+            return ResponseEntity.ok(response);
+        }catch (RuntimeException e){
+            return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                    "message", e.getMessage(),
+                    "statusCode", HttpStatus.UNAUTHORIZED.value()
             ));
 
         }
