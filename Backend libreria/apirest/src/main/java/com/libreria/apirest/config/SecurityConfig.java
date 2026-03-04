@@ -30,7 +30,10 @@ public class SecurityConfig {
                 // AUTORIZAR REQUEST
                 .authorizeHttpRequests(auth -> auth
                         // SE ELIMINO EL METODO POST PARA PERMITIR, EN CASO FALTA ESO TODOS LOS METODOS SON PERMITIDOS
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(
+                            "/auth/**",
+                            "/uploads/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex ->

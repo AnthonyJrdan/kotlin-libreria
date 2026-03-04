@@ -1,7 +1,7 @@
 package com.libreria.apirest.controllers;
 
 import com.libreria.apirest.DTO.user.CreateUserRequest;
-import com.libreria.apirest.DTO.user.CreateUserResponse;
+import com.libreria.apirest.DTO.user.UserResponse;
 import com.libreria.apirest.DTO.user.LoginRequest;
 import com.libreria.apirest.DTO.user.LoginResponse;
 import com.libreria.apirest.services.UserService;
@@ -26,7 +26,7 @@ public class AuthController {
     public ResponseEntity<?> create(@RequestBody CreateUserRequest request)
     {
         try{
-            CreateUserResponse user = userService.create(request);
+            LoginResponse user = userService.create(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         }catch (RuntimeException e){
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(

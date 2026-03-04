@@ -2,9 +2,11 @@ package com.libreria.apirest.services;
 
 import com.libreria.apirest.DTO.rol.RoleDTO;
 import com.libreria.apirest.DTO.user.CreateUserRequest;
-import com.libreria.apirest.DTO.user.CreateUserResponse;
+import com.libreria.apirest.DTO.user.UserResponse;
+import com.libreria.apirest.DTO.user.mapper.UserMapper;
 import com.libreria.apirest.DTO.user.LoginRequest;
 import com.libreria.apirest.DTO.user.LoginResponse;
+import com.libreria.apirest.DTO.user.UpdateUserRequest;
 import com.libreria.apirest.models.Role;
 import com.libreria.apirest.models.User;
 import com.libreria.apirest.models.UserRol;
@@ -18,6 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 
@@ -42,9 +48,12 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil; 
 
+    @Autowired
+    private UserMapper userMapper;
+
     // Guardar informacion a la bd
     @Transactional
-    public CreateUserResponse create(CreateUserRequest request)
+    public LoginResponse create(CreateUserRequest request)
     {
         if (userRepository.existsByEmail(request.email)) {
             throw new RuntimeException("El Correo ya esta registrado");
@@ -76,22 +85,17 @@ public class UserService {
         userRolRepository.save(userRol);
 
 
-        CreateUserResponse response = new CreateUserResponse();
-        response.setId(savedUser.getId());
-        response.setNombre(savedUser.getNombre());
-        response.setApellido(savedUser.getApellido());
-        response.setImagen(savedUser.getImagen());
-        response.setTelefono(savedUser.getTelefono());
-        response.setEmail(savedUser.getEmail());
-
-        //
+        // ! TOKEN DE SESION
+        String token = jwtUtil.generateToken(user);
+        // Obtenemos el rol por el id del usuario
         List<Role> roles = roleRepository.findAllByUserRoles_User_Id(savedUser.getId());
-        List<RoleDTO> roleDTOS = roles.stream()
-                        .map(role -> new RoleDTO(role.getId(), role.getNombre(), role.getImagen(), role.getRuta()))
-                                .toList();
+        // Instanciamos el DTO del login response
+        LoginResponse response = new LoginResponse();
+        // Enviamos el token
+        response.setToken("Bearer " + token);
+        // guardamos la informacion 
+        response.setUser(userMapper.toUserResponse(user, roles));
 
-
-        response.setRoles(roleDTOS);
 
 
 
@@ -112,22 +116,9 @@ public class UserService {
 
         String token = jwtUtil.generateToken(user);
         List<Role> roles = roleRepository.findAllByUserRoles_User_Id(user.getId());
-        List<RoleDTO> roleDTOS = roles.stream()
-                        .map(role -> new RoleDTO(role.getId(), role.getNombre(), role.getImagen(), role.getRuta()))
-                                .toList();
-
-        CreateUserResponse createUserResponse = new CreateUserResponse();
-        createUserResponse.setId(user.getId());
-        createUserResponse.setNombre(user.getNombre());
-        createUserResponse.setApellido(user.getApellido());
-        createUserResponse.setImagen(user.getImagen());
-        createUserResponse.setTelefono(user.getTelefono());
-        createUserResponse.setEmail(user.getEmail());
-        createUserResponse.setRoles(roleDTOS);
-
         LoginResponse response = new LoginResponse();
         response.setToken("Bearer " + token);
-        response.setUser(createUserResponse);
+        response.setUser(userMapper.toUserResponse(user, roles));
 
         return response;
     }
@@ -135,24 +126,60 @@ public class UserService {
 
     // Devolver el usuario por id
     @Transactional
-    public CreateUserResponse findById(Long id)
+    public UserResponse findById(Long id)
     {
         User user = userRepository.findById(id).orElseThrow
         (() -> new RuntimeException("El Email o password no son validos"));
     List<Role> roles = roleRepository.findAllByUserRoles_User_Id(user.getId());
-        List<RoleDTO> roleDTOS = roles.stream()
-                        .map(role -> new RoleDTO(role.getId(), role.getNombre(), role.getImagen(), role.getRuta()))
-                                .toList();
 
-        CreateUserResponse createUserResponse = new CreateUserResponse();
-        createUserResponse.setId(user.getId());
-        createUserResponse.setNombre(user.getNombre());
-        createUserResponse.setApellido(user.getApellido());
-        createUserResponse.setImagen(user.getImagen());
-        createUserResponse.setTelefono(user.getTelefono());
-        createUserResponse.setEmail(user.getEmail());
-        createUserResponse.setRoles(roleDTOS);
 
-        return createUserResponse;
+        return userMapper.toUserResponse(user, roles);
+    }
+
+
+    // Actualizar usuario con imagen
+
+
+    @Transactional
+    public UserResponse updateUserWhitImage(Long id, UpdateUserRequest request) throws IOException
+    {
+        User user = userRepository.findById(id).orElseThrow
+        (() -> new RuntimeException("El Email o password no son validos"));
+
+
+        // ! Validaciones
+        if(request.getNombre() != null){
+            user.setNombre(request.getNombre());
+        } 
+
+        if(request.getApellido() != null){
+            user.setApellido(request.getApellido());
+        }
+
+        if(request.getTelefono() != null){
+            user.setTelefono(request.getTelefono());
+        }
+
+        // * Agregamos ruta y actualizamos imagen
+        if(request.getArchivo() != null && !request.getArchivo().isEmpty()) {
+            String uploadDir = "uploads/usuarios/" + user.getId();
+            String nombreArchivo= request.getArchivo().getOriginalFilename();
+            String rutaImagen = Paths.get(uploadDir, nombreArchivo).toString();
+
+            Files.createDirectories(Paths.get(uploadDir));
+            Files.copy(request.getArchivo().getInputStream(), Paths.get(rutaImagen), StandardCopyOption.REPLACE_EXISTING);
+            user.setImagen("/" + rutaImagen.replace("\\", "/"));
+        }
+
+
+        userRepository.save(user);
+
+
+
+
+    List<Role> roles = roleRepository.findAllByUserRoles_User_Id(user.getId());
+
+
+        return userMapper.toUserResponse(user, roles);
     }
 }
