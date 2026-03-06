@@ -27,11 +27,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // GET- OBTENER
-    // POST - CREAR
-    // PUT - ACTUALIZAR
-    // DELETE - ELIMINAR
-
     // @PostMapping
     // public ResponseEntity<UserResponse> create(@RequestBody CreateUserRequest request)
     // {
