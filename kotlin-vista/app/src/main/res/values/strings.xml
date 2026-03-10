@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">kotlin-libreria</string>
+    <string name="txtlibreria">Mi Librería</string>
+    <string name="txtcorreo">Correo electrónico</string>
+    <string name="txtlogincontraseña">Contraseña</string>
+    <string name="txtentrarbiblioteca">Entrar a la Biblioteca</string>
+    <string name="txtirregistro">¿No tienes cuenta? Regístrate</string>
+    <string name="txtregistrobiblioteca">Registro Biblioteca</string>
+    <string name="textnombreregistro">Nombre</string>
+    <string name="textapellidoregistro">Apellido</string>
+    <string name="textcorreoregistro">Correo electrónico</string>
+    <string name="texttelefonoregistro">Teléfono</string>
+    <string name="textcontrasenaregistro">Contraseña</string>
+    <string name="textregistrarr">Registrarse</string>
+    <string name="textirlogin">¿Ya tienes cuenta? Inicia sesión</string>
 </resources>
