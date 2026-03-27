@@ -1,8 +1,8 @@
 package com.libreria.apirest.models;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,41 +15,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
-@Entity
-@Table(name = "libros")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Libro {
+@Table(name = "direccion")
+public class Direccion {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_categoria", nullable = false)
-    private Categoria categoria;
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 
     @Column(length = 255, nullable = false)
-    private String nombre;
+    private String direccion;
 
     @Column(length = 255, nullable = false)
-    private String autor;    
-
-    //! definir la columna en formato texto
-    @Column(columnDefinition = "TEXT")
-    private String descipcion;
-
-    @Column(length = 255, nullable = true)
-    private String imagen1;
-
-    @Column(length = 255, nullable = true)
-    private String imagen2;
-
-    @Column(length = 255, nullable = false)
-    private Double precio;
+    private String localidad;    
 
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime createAt = LocalDateTime.now();

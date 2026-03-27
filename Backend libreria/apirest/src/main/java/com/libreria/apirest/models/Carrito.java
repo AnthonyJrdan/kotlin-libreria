@@ -1,55 +1,42 @@
 package com.libreria.apirest.models;
+
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.Collate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Entity
-@Table(name = "libros")
+@Table(name = "carrito")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Libro {
-    
+public class Carrito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_categoria", nullable = false)
-    private Categoria categoria;
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 
-    @Column(length = 255, nullable = false)
-    private String nombre;
 
-    @Column(length = 255, nullable = false)
-    private String autor;    
+    @ManyToOne
+    @JoinColumn(name = "id_direccion", nullable = false)
+    private Direccion direccion;
 
-    //! definir la columna en formato texto
-    @Column(columnDefinition = "TEXT")
-    private String descipcion;
-
-    @Column(length = 255, nullable = true)
-    private String imagen1;
-
-    @Column(length = 255, nullable = true)
-    private String imagen2;
-
-    @Column(length = 255, nullable = false)
-    private Double precio;
+    @Column(length = 255)
+    private String status = "PAGADO";
 
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime createAt = LocalDateTime.now();
@@ -58,8 +45,4 @@ public class Libro {
     @Column(name = "fecha_actualizacion", nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
 
-    @PreUpdate
-    public void onUpdate() {
-        this.updateAt = LocalDateTime.now();
-    }
 }
