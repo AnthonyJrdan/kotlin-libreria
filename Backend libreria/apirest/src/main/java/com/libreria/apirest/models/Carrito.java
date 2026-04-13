@@ -31,10 +31,6 @@ public class Carrito {
     private User user;
 
 
-    @ManyToOne
-    @JoinColumn(name = "id_direccion", nullable = false)
-    private Direccion direccion;
-
     @Column(length = 255)
     private String status = "PAGADO";
 
